@@ -135,7 +135,7 @@ The requests are given in the form of strings, and the location of the output
 is given in an input address. The student must implement the function to load 
 data from the given files into the defined data structure. 
 
-## 3. Implementation}
+## 3. Implementation
 An initial code package is provided with some source files. The ``main.cpp`` 
 file contains the main function of the application and should not be modified 
 since it will be overwritten during the grading process. Two files 
