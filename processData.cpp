@@ -15,19 +15,6 @@
  * */
 using namespace std;
 
-template <typename T>
-void PrintReqOutput(const char* pRequest, T* pOutput, int N) {
-    cout << pRequest << ":";
-    if (pOutput == nullptr) {
-        cout << " error\n";
-        return;
-    }
-    for (int i = 0; i < N; ++i) {
-        cout << ' ' << *pOutput++;
-    }
-    cout << '\n';
-}
-
 void Initialization() {
     // If you use global variables, please initialize them explicitly in this function.
 }
