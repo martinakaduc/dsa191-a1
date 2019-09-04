@@ -158,7 +158,7 @@ The student should follow the submission instruction on the course site (e-learn
 One file **src.zip** contains ``processData.cpp``, ``processData.h``, 
 ``dsalib.h``, ``dbLib.h``, and ``dblib.cpp`` must be submitted during the given timeline. 
 The OS system that builds and run code is Linux (Ubuntu). Please do not
-use any special functions that do not exist on Linux, otherwise, 
+use any special function that does not exist on Linux, otherwise, 
 your code cannot be built.
 Student can build their code on Linux before submit to ensure that the code works.
 
