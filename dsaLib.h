@@ -36,7 +36,8 @@ struct L1Item {
     T data;
     L1Item<T> *pNext;
     L1Item() : pNext(NULL) {}
-    L1Item(T &a) : data(a), pNext(NULL) {}
+    L1Item(T& a) : data(a), pNext(NULL) {}
+	  L1Item(T& a, L1Item<T>* _pNext) : data(a), pNext(_pNext) {}
 };
 
 template <class T>
@@ -45,7 +46,9 @@ class L1List {
     size_t      _size;// number of elements in this list
 public:
     L1List() : _pHead(NULL), _size(0) {}
-    ~L1List();
+    ~L1List() {
+      this->clean();
+    }
 
     void    clean();
     bool    isEmpty() {
@@ -72,18 +75,141 @@ public:
 
     void    traverse(void (*op)(T&)) {
         // TODO: Your code goes here
+        for (L1Item<T>* p = this->_pHead; p != nullptr; p = p->pNext) {
+          op(p->data);
+        }
     }
     void    traverse(void (*op)(T&, void*), void* pParam) {
         // TODO: Your code goes here
+        for (L1Item<T>* p = this->_pHead; p != nullptr; p = p->pNext) {
+          op(p->data, pParam);
+        }
     }
 };
+
+template <class T>
+void L1List<T>::clean() {
+  L1Item<T>* temp;
+  while (this->_pHead != nullptr) {
+    temp = this->_pHead;
+    this->_pHead = this->_pHead->pNext;
+    delete temp;
+  }
+  this->_size = 0;
+}
+
+template <class T>
+T& L1List<T>::at(int i) {
+  //if (i < 0 || i >= this->_size) return nullptr;
+  L1Item<T>* outData = this->_pHead;
+  //for (int k = 0; k < i; k++) {
+    //outData = outData->pNext;
+  //}
+  while (i) {
+	  outData = outData->pNext;
+	  i--;
+  }
+  return outData->data;
+}
+
+template <class T>
+T& L1List<T>::operator[](int i) {
+	//if (i < 0 || i >= this->_size) return nullptr;
+	L1Item<T>* outData = this->_pHead;
+	//for (int k = 0; k < i; k++) {
+	  //outData = outData->pNext;
+	//}
+	while (i) {
+		outData = outData->pNext;
+		i--;
+	}
+	return outData->data;
+}
+
+template <class T>
+bool L1List<T>::find(T& a, int& idx){
+  L1Item<T>* pLoc = this->_pHead;
+  for (idx = 0; idx < this->_size; idx++) {
+    if (pLoc->data.name == a.name) {
+      return true;
+    }
+    pLoc = pLoc->pNext;
+  }
+  idx = -1;
+  return false;
+}
+
+template <class T>
+int L1List<T>::insert(int i, T& a){
+  if (i < 0 || i > this->_size) return -1; // Allow insert into last
+
+  //L1Item<T>* pNew = new L1Item<T>();
+  //if (pNew == nullptr) return -1;
+
+  //pNew->data = a;
+
+  if (this->_pHead == nullptr || i == 0) {
+    //pNew->pNext = this->_pHead;
+    //this->_pHead = pNew;
+	  this->_pHead = new L1Item<T>(a, this->_pHead);
+  } else {
+    L1Item<T>* pPre = this->_pHead;
+    int index = 0;
+    for (int k = 0; k < i - 1; k++) {
+      pPre = pPre->pNext;
+    }
+	pPre->pNext = new L1Item<T>(a, pPre->pNext);
+    //pNew->pNext = pPre->pNext;
+    //pPre->pNext = pNew;
+  }
+
+  this->_size++;
+  return 0;
+}
+
+template <class T>
+int L1List<T>::remove(int i){
+  if (i < 0 || i >= this->_size || this->_size == 0) return -1;
+
+  L1Item<T>* pLoc = this->_pHead;
+  if (i == 0) {
+    this->_pHead = pLoc->pNext;
+  } else {
+    L1Item<T>* pPre = this->_pHead;
+    int index = 0;
+    for (int k = 0; k < i - 1; k++) {
+      pPre = pPre->pNext;
+    }
+    pLoc = pPre->pNext;
+    pPre->pNext = pLoc->pNext;
+  }
+
+  delete pLoc;
+  this->_size--;
+  return 0;
+}
+
+template <class T>
+void L1List<T>::reverse(){
+  L1Item<T>* pPre = nullptr;
+  L1Item<T>* pLoc = this->_pHead;
+  L1Item<T>* pNex = nullptr;
+
+  while (pLoc != nullptr) {
+    pNex = pLoc->pNext;
+    pLoc->pNext = pPre;
+    pPre = pLoc;
+    pLoc = pNex;
+  }
+  this->_pHead = pPre;
+}
 
 /// Insert item to the end of the list
 /// Return 0 if success, -1 otherwise
 template <class T>
 int L1List<T>::push_back(T &a) {
     // TODO: Your code goes here
-    return 0;
+    return this->insert(this->_size, a);
 }
 
 /// Insert item to the front of the list
@@ -91,7 +217,7 @@ int L1List<T>::push_back(T &a) {
 template <class T>
 int L1List<T>::insertHead(T &a) {
     // TODO: Your code goes here
-    return 0;
+    return this->insert(0, a);
 }
 
 /// Remove the first item of the list
@@ -99,7 +225,7 @@ int L1List<T>::insertHead(T &a) {
 template <class T>
 int L1List<T>::removeHead() {
     // TODO: Your code goes here
-    return -1;
+    return this->remove(0);
 }
 
 /// Remove the last item of the list
@@ -107,7 +233,7 @@ int L1List<T>::removeHead() {
 template <class T>
 int L1List<T>::removeLast() {
     // TODO: Your code goes here
-    return -1;
+    return this->remove(this->_size-1);
 }
 
 #endif //DSA191_A1_DSALIB_H
