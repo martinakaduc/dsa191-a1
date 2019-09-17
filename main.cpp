@@ -19,10 +19,10 @@ int main() {
     void*   pOutput = nullptr;
     int     N;
 
-    // clock_t start = clock(), end;
+    clock_t start = clock(), end;
     LoadData(pData);
-    // end = clock();
-    // cout << (double) (end - start) / CLOCKS_PER_SEC;
+    end = clock();
+    cout << (double) (end - start) / CLOCKS_PER_SEC;
 
     assert(pData != nullptr);
     cout << fixed << setprecision(8);

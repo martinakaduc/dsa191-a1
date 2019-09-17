@@ -335,10 +335,11 @@ void ProcessRequest(const char* pRequest, void* pData, void* &pOutput, int &N) {
           }
         } else if (colOrder == 1) {
           Point2D coords;
-          int spiltPoint = eachCol.find(' ');
-          coords.x = stof(eachCol.substr(6, spiltPoint - 6));
-          coords.y = stof(eachCol.substr(spiltPoint+1, eachCol.length() - spiltPoint - 2));
-          aStation.coords = coords;
+          // int spiltPoint = eachCol.find(' ');
+          // coords.x = stof(eachCol.substr(6, spiltPoint - 6));
+          // coords.y = stof(eachCol.substr(spiltPoint+1, eachCol.length() - spiltPoint - 2));
+          // aStation.coords = coords;
+          aStation.coords.data = eachCol.substr(6, eachCol.length()-1-6);
         } else {
           continue;
         }
@@ -433,15 +434,15 @@ void ProcessRequest(const char* pRequest, void* pData, void* &pOutput, int &N) {
             name = eachCol;
           }
         } else if (colOrder == 1) {
-          int spiltPoint = eachCol.find(' ');
-          coords.x = stof(eachCol.substr(6, spiltPoint-6));
-          coords.y = stof(eachCol.substr(spiltPoint+1, eachCol.length()-spiltPoint-2));
+          // int spiltPoint = eachCol.find(' ');
+          // coords.x = stof(eachCol.substr(6, spiltPoint-6));
+          // coords.y = stof(eachCol.substr(spiltPoint+1, eachCol.length()-spiltPoint-2));
+          coords.data = eachCol.substr(6, eachCol.length()-1-6);
         } else {
           continue;
         }
         colOrder++;
       }
-      cout << name << '\n';
 
       bool result = pDataset->station->at(paras[1]).updateStation(name, coords);
 

@@ -69,16 +69,24 @@ bool TLine::removeStation(int station_id) {
   return false;
 }
 
-bool TTrack::appendStationCoord(Point2D &station) {
-  bool allocSuccess = reAllocA(this->lineString, this->nStation, this->nStation + 1, -1);
-  if (!allocSuccess) return false;
-  this->lineString[this->nStation - 1] = station;
+bool TTrack::appendStationCoord(Point2D& station) {
+  // bool allocSuccess = reAllocA(this->lineString, this->nStation, this->nStation + 1, -1);
+  // if (!allocSuccess) return false;
+  // this->lineString[this->nStation - 1] = station;
+  this->lineString = this->lineString + ',' + station.data;
+  this->nStation++;
   return true;
 }
 
 int TTrack::getStationByCoord(Point2D &station) {
+  stringstream stream(this->lineString);
+  string matchStation;
   for (int i = 0; i < this->nStation; i++) {
-    if (this->lineString[i] == station) {
+  //   if (this->lineString[i] == station) {
+  //     return i;
+  //   }
+    getline(stream, matchStation, ',');
+    if (matchStation == station.data) {
       return i;
     }
   }
@@ -86,17 +94,27 @@ int TTrack::getStationByCoord(Point2D &station) {
 }
 
 bool TTrack::removeStation(Point2D &station) {
+  stringstream stream(this->lineString);
+  string matchStation;
   int i = 0;
   while (i < this->nStation) {
-    if (this->lineString[i] == station) {
-      // cout << "Removing...";
-      this->nStation--;
-      for (int k = i; k < this->nStation; k++) {
-        this->lineString[k] = this->lineString[k+1];
+  //   if (this->lineString[i] == station) {
+  //     // cout << "Removing...";
+  //     this->nStation--;
+  //     for (int k = i; k < this->nStation; k++) {
+  //       this->lineString[k] = this->lineString[k+1];
+  //     }
+  //     return true;
+  //   }
+  //   i++;
+
+    getline(stream, matchStation, ',');
+    if (matchStation == station.data) {
+        this->nStation--;
+        this->lineString.erase(this->lineString.find(matchStation, matchStation.length()+1));
+        return true;
       }
-      return true;
-    }
-    i++;
+      i++;
   }
   return false;
 }
@@ -275,9 +293,10 @@ void insertStation(T& TData, void* pParam) {
          }
        } else if (colOrder == 2) {
          Point2D coords;
-         int spiltPoint = eachCol.find(' ');
-         coords.x = stof(eachCol.substr(6, spiltPoint-6));
-         coords.y = stof(eachCol.substr(spiltPoint+1, eachCol.length()-spiltPoint-2));
+         // int spiltPoint = eachCol.find(' ');
+         // coords.x = stof(eachCol.substr(6, spiltPoint-6));
+         // coords.y = stof(eachCol.substr(spiltPoint+1, eachCol.length()-spiltPoint-2));
+         coords.data = eachCol.substr(6, eachCol.length()-1-6);
          aStation.coords = coords;
        } else if (colOrder == 6) {
          aStation.city_id = stoi(eachCol);
@@ -371,16 +390,17 @@ void insertStation(T& TData, void* pParam) {
          } else if (eachCol[eachCol.length() - 1] == '"') {
            eachCol = eachCol.substr(0, eachCol.length() - 1);
 
-           coords.x = stof(eachCol.substr(0, eachCol.find(' ')));
-           coords.y = stof(eachCol.substr(eachCol.find(' ') + 1));
+           // coords.x = stof(eachCol.substr(0, eachCol.find(' ')));
+           // coords.y = stof(eachCol.substr(eachCol.find(' ') + 1));
 
+           coords.data = eachCol;
            aTrack.appendStationCoord(coords);
-
            break;
          }
-         coords.x = stof(eachCol.substr(0, eachCol.find(' ')));
-         coords.y = stof(eachCol.substr(eachCol.find(' ') + 1));
+         // coords.x = stof(eachCol.substr(0, eachCol.find(' ')));
+         // coords.y = stof(eachCol.substr(eachCol.find(' ') + 1));
 
+         coords.data = eachCol;
          aTrack.appendStationCoord(coords);
          continue;
 

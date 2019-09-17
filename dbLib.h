@@ -33,17 +33,27 @@ template <typename T>
 void insertStation(T& TData, void* pParam);
 
 struct Point2D {
-  double x;
-  double y;
-  Point2D(): x(0), y(0) {}
-  Point2D(double _x, double _y): x(_x), y(_y) {}
+  // double x;
+  // double y;
+  // Point2D(): x(0), y(0) {}
+  // Point2D(double _x, double _y): x(_x), y(_y) {}
+  // Point2D& operator=(const Point2D& p) {
+  //   this->x = p.x;
+  //   this->y = p.y;
+  //   return (*this);
+  // }
+  // bool operator==(const Point2D& p) {
+  //   return (this->x == p.x && this->y == p.y);
+  // }
+  string data;
+  Point2D(): data("") {}
+  Point2D(string _data): data(_data) {}
   Point2D& operator=(const Point2D& p) {
-    this->x = p.x;
-    this->y = p.y;
+    this->data = p.data;
     return (*this);
   }
   bool operator==(const Point2D& p) {
-    return (this->x == p.x && this->y == p.y);
+    return (this->data == p.data);
   }
 };
 
@@ -53,8 +63,8 @@ struct TStation {
    string name;
    Point2D coords;
    int city_id;
-   TStation(): id(-1), name(""), coords(Point2D(0, 0)), city_id(-1) {}
-   TStation(int _id, string _name) : id(_id), name(_name), coords(Point2D(0, 0)), city_id(-1) {}
+   TStation(): id(-1), name(""), coords(Point2D()), city_id(-1) {}
+   TStation(int _id, string _name) : id(_id), name(_name), coords(Point2D()), city_id(-1) {}
    TStation(int _id, string _name, Point2D _coords, int _city_id): id(_id), name(_name), coords(_coords), city_id(_city_id) {}
    bool updateStation(string _name, Point2D _coords);
 };
@@ -86,9 +96,12 @@ struct TTrack {
   // The structure to store track information
   int id;
   int nStation;
-  Point2D* lineString;
-  TTrack(): id(-1), nStation(0), lineString(nullptr) {}
-  TTrack(int _id, int _nStation, Point2D* _lineString): id(_id), nStation(_nStation), lineString(_lineString) {}
+  // Point2D* lineString;
+  string lineString;
+  // TTrack(): id(-1), nStation(0), lineString(nullptr) {}
+  // TTrack(int _id, int _nStation, Point2D* _lineString): id(_id), nStation(_nStation), lineString(_lineString) {}
+  TTrack(): id(-1), nStation(0), lineString("") {}
+  TTrack(int _id, int _nStation, string _lineString): id(_id), nStation(_nStation), lineString(_lineString) {}
   bool appendStationCoord(Point2D &station);
   int getStationByCoord(Point2D &station);
   bool removeStation(Point2D &station);
