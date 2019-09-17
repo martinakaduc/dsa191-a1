@@ -348,16 +348,14 @@ void insertStation(T& TData, void* pParam) {
    int track_id = -1;
    Point2D coords;
 
-   while(!readFile.eof()) {
+   while(getline(readFile, lineString)) {
      if (colOrder == -1) {
-       getline(readFile, lineString);
        colOrder = 0;
        continue;
      }
 
      TTrack aTrack = TTrack();
 
-     getline(readFile, lineString);
      if (lineString.length() == 0) continue;
      stringstream lineStream(lineString);
      string eachCol;
