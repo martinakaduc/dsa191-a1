@@ -65,7 +65,7 @@ public:
     int     insert(int i, T& a);// insert an element into the list at location i. Return 0 if success, -1 otherwise
     int     remove(int i);// remove an element at position i in the list. Return 0 if success, -1 otherwise.
 
-    int     push_back(T& a);// insert to the end of the list
+    int     push_back(T &a);// insert to the end of the list
     int     insertHead(T& a);// insert to the beginning of the list
 
     int     removeHead();// remove the beginning element of the list
@@ -140,17 +140,10 @@ bool L1List<T>::find(T& a, int& idx){
 }
 
 template <class T>
-int L1List<T>::insert(int i, T& a){
+int L1List<T>::insert(int i, T &a){
   if (i < 0 || i > this->_size) return -1; // Allow insert into last
 
-  //L1Item<T>* pNew = new L1Item<T>();
-  //if (pNew == nullptr) return -1;
-
-  //pNew->data = a;
-
   if (this->_pHead == nullptr || i == 0) {
-    //pNew->pNext = this->_pHead;
-    //this->_pHead = pNew;
 	  this->_pHead = new L1Item<T>(a, this->_pHead);
   } else {
     L1Item<T>* pPre = this->_pHead;
@@ -158,9 +151,8 @@ int L1List<T>::insert(int i, T& a){
     for (int k = 0; k < i - 1; k++) {
       pPre = pPre->pNext;
     }
+
 	pPre->pNext = new L1Item<T>(a, pPre->pNext);
-    //pNew->pNext = pPre->pNext;
-    //pPre->pNext = pNew;
   }
 
   this->_size++;

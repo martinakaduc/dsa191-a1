@@ -70,7 +70,7 @@ bool TLine::removeStation(int station_id) {
 }
 
 bool TTrack::appendStationCoord(Point2D &station) {
-  bool allocSuccess = reAllocA(this->lineString, this->nStation, this->nStation + 1, -1);
+  bool allocSuccess = reAllocA(this->lineString, this->nStation, this->nStation + 1, this->nStation);
   if (!allocSuccess) return false;
   this->lineString[this->nStation - 1] = station;
   return true;
@@ -236,6 +236,8 @@ void insertStation(T& TData, void* pParam) {
    L1List<TStation>* stationData = new L1List<TStation>();
    colOrder = -1;
    city_id = -1;
+   Point2D coords;
+   int spiltPoint = 0;
 
    while(getline(readFile, lineString)) {
      if (colOrder == -1) {
@@ -274,8 +276,8 @@ void insertStation(T& TData, void* pParam) {
            aStation.name = eachCol;
          }
        } else if (colOrder == 2) {
-         Point2D coords;
-         int spiltPoint = eachCol.find(' ');
+
+         spiltPoint = eachCol.find(' ');
          coords.x = stof(eachCol.substr(6, spiltPoint-6));
          coords.y = stof(eachCol.substr(spiltPoint+1, eachCol.length()-spiltPoint-2));
          aStation.coords = coords;
@@ -346,7 +348,6 @@ void insertStation(T& TData, void* pParam) {
    L1List<TTrack>* trackData = new L1List<TTrack>();
    colOrder = -1;
    int track_id = -1;
-   Point2D coords;
 
    while(getline(readFile, lineString)) {
      if (colOrder == -1) {
@@ -366,20 +367,23 @@ void insertStation(T& TData, void* pParam) {
          aTrack.id = stoi(eachCol);
        } else if (colOrder == 1) {
          if (eachCol == "LINESTRING Z EMPTY") break;
-         if (eachCol[0] == '"') {
-           eachCol = eachCol.substr(eachCol.find('(')+1);
-         } else if (eachCol[eachCol.length() - 1] == '"') {
-           eachCol = eachCol.substr(0, eachCol.length() - 1);
 
-           coords.x = stof(eachCol.substr(0, eachCol.find(' ')));
-           coords.y = stof(eachCol.substr(eachCol.find(' ') + 1));
+         if (eachCol[0] == '"') {
+           eachCol = eachCol.substr(12);
+         } else if (eachCol[eachCol.length() - 1] == '"') {
+           eachCol = eachCol.substr(0, eachCol.length() - 2);
+
+           spiltPoint = eachCol.find(' ');
+           coords.x = stof(eachCol.substr(0, spiltPoint));
+           coords.y = stof(eachCol.substr(spiltPoint + 1));
 
            aTrack.appendStationCoord(coords);
 
            break;
          }
-         coords.x = stof(eachCol.substr(0, eachCol.find(' ')));
-         coords.y = stof(eachCol.substr(eachCol.find(' ') + 1));
+         spiltPoint = eachCol.find(' ');
+         coords.x = stof(eachCol.substr(0, spiltPoint));
+         coords.y = stof(eachCol.substr(spiltPoint + 1));
 
          aTrack.appendStationCoord(coords);
          continue;
