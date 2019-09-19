@@ -307,7 +307,7 @@ void ProcessRequest(const char* pRequest, void* pData, void* &pOutput, int &N) {
       pDataset->station->traverse(findMaxId, (void*) id_max);
 
       TStation aStation;
-      aStation.id = *id_max + 1;
+      aStation.id = ++(*id_max);
 
       stringstream csvStream(csv_description);
       string eachCol;
