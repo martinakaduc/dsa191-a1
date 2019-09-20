@@ -441,7 +441,6 @@ void ProcessRequest(const char* pRequest, void* pData, void* &pOutput, int &N) {
         }
         colOrder++;
       }
-      cout << name << '\n';
 
       bool result = pDataset->station->at(paras[1]).updateStation(name, coords);
 
