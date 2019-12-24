@@ -140,7 +140,7 @@ void ProcessRequest(const char* pRequest, void* pData, void* &pOutput, int &N) {
       pDataset->city->find(findCity, city_idx);
 
       if (city_idx == -1) {
-        N = 1;
+        N = 0;
         int* pOutputt = new int();
         *pOutputt = -1;
         pOutput = (void*) pOutputt;
@@ -167,7 +167,7 @@ void ProcessRequest(const char* pRequest, void* pData, void* &pOutput, int &N) {
       pDataset->city->find(findCity, city_idx);
 
       if (city_idx == -1) {
-        N = 1;
+        N = 0;
         int* pOutputt = new int();
         *pOutputt = -1;
         pOutput = (void*) pOutputt;
@@ -197,7 +197,7 @@ void ProcessRequest(const char* pRequest, void* pData, void* &pOutput, int &N) {
       pDataset->line->traverse(findIdxById, (void*) paras);
 
       if (paras[1] == -1) {
-        N = 1;
+        N = 0;
         int* pOutputt = new int();
         *pOutputt = -1;
         pOutput = (void*) pOutputt;
@@ -460,7 +460,24 @@ void ProcessRequest(const char* pRequest, void* pData, void* &pOutput, int &N) {
       int line_id = stoi(request.substr(0, request.find(' ')));
       int pos = stoi(request.substr(request.find(' ') + 1));
 
-      int* paras = new int[4];
+      int* paras = new int[3];
+
+      paras[0] = station_id;
+      paras[1] = -1;
+      paras[2] = 0;
+      pDataset->station->traverse(findIdxById, (void*) paras);
+
+      if (paras[1] == -1) {
+        N = 1;
+        int* pOutputt = new int();
+        *pOutputt = -1;
+        pOutput = (void*) pOutputt;
+        return;
+      }
+
+      delete[] paras;
+
+      paras = new int[4];
       paras[0] = line_id;
       paras[1] = station_id;
       paras[2] = pos;

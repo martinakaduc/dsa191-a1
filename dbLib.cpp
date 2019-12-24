@@ -165,9 +165,9 @@ void insertStation(T& TData, void* pParam) {
        colOrder++;
      }
 
-     citiData->push_back(aCity);
+     citiData->insertHead(aCity);
    }
-
+   citiData->reverse();
    readFile.close();
 
    // citiData->insert(citiData->getSize(), (*citiData)[0]);
@@ -215,9 +215,9 @@ void insertStation(T& TData, void* pParam) {
        colOrder++;
      }
 
-     lineData->push_back(aLine);
+     lineData->insertHead(aLine);
    }
-
+   lineData->reverse();
    readFile.close();
 
    // for (int i = 0; i < lineData->getSize(); i++) {
@@ -287,9 +287,9 @@ void insertStation(T& TData, void* pParam) {
        colOrder++;
      }
 
-     stationData->push_back(aStation);
+     stationData->insertHead(aStation);
    }
-
+   stationData->reverse();
    readFile.close();
    // for (int i = 0; i < stationData->getSize(); i++) {
    //   TStation tempStation = stationData->at(i);
@@ -394,9 +394,9 @@ void insertStation(T& TData, void* pParam) {
        colOrder++;
      }
 
-     trackData->push_back(aTrack);
+     trackData->insertHead(aTrack);
    }
-
+   trackData->reverse();
    readFile.close();
 
    TDataset* pDataset = new TDataset(citiData, lineData, trackData, stationData);
